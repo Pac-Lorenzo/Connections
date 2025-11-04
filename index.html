@@ -1,31 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en-us">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
     <title>Connections</title>
-    <link rel="stylesheet" href="connections.css">
-    <meta name="description" content="Connections Game">
-</head>
+    <meta name="description" content="Connections" />
+    <link rel="stylesheet" href="connections.css" />
+  </head>
 
-<body>
-    <h1>Categorize</h1>
-    <p>Select 4 words that belong to the same category</p>
-    <p id="counter">Selected: 0/4</p>
+  <body>
+    <div class="container">
+      <h1>Connections</h1>
+      <p>Select 4 words that belong to the same category.</p>
+      <p id="counter">Selected: 0/4</p>
 
-    <div id="message" class="message"></div>
-    
-    <form id="game-form">
-        <div id="checkbox-list">
-        </div>
-        
+      <div id="message" class="message"></div>
+
+      <form id="game-form">
+        <div id="checkbox-list"></div>
         <button type="submit" id="submit-btn" disabled>Submit</button>
-    </form>
+      </form>
 
-    <div id="found-categories" class="found"></div>
+      <div id="found-categories" class="found"></div>
+    </div>
 
     <script src="connections.js"></script>
-</body>
-
+  </body>
 </html>

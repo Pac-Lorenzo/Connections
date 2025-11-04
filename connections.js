@@ -1,157 +1,154 @@
 let categories = {
-    animals: ['platypus', 'tiger', 'leopard', 'capybara'],
-    workouts: ['curl', 'squat', 'bench', 'pulldown'],
-    countries: ['Spain', 'Monaco', 'Mexico', 'Japan'],
-    classes: ['Philosophy', 'Circuits', 'Chemistry', 'Drawing']
+  animals: ["fox", "deer", "bear", "squirrel"],
+  trees: ["oak", "pine", "cherry", "maple"],
+  colors: ["purple", "red", "blue", "green"],
+  beatles: ["John", "Paul", "George", "Ringo"],
 };
 
-let checkboxList = document.querySelector("#checkbox-list");
-let submitButton = document.querySelector("button");
-let gameForm = document.querySelector("#game-form");
-let counter = document.querySelector("#counter");
-let messageBox = document.querySelector("#message");
-let foundCategories = document.querySelector("#found-categories");
+const checkboxList = document.querySelector("#checkbox-list");
+const gameForm = document.querySelector("#game-form");
+const counter = document.querySelector("#counter");
+const messageBox = document.querySelector("#message");
+const foundCategories = document.querySelector("#found-categories");
+const submitButton = document.querySelector("#submit-btn");
 
-// Function to create array of ordered words
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 function getAllWords() {
-    let allWords = [];
-    for (let category in categories) {
-        categories[category].forEach(word => {
-            allWords.push({
-                word: word,
-                category: category
-            });
-        });
+  let words = [];
+  for (let cat in categories) {
+    for (let w of categories[cat]) {
+      words.push({ word: w, category: cat });
     }
-    return allWords.sort(() => Math.random() - 0.5);
+  }
+  return shuffle(words);
 }
 
-// Function to generate checkboxes in order
-function generateCheckboxes() {
-    let allWords = getAllWords();
-    
-    allWords.forEach((item, index) => {
-        // Create wrapper div
-        let wrapper = document.createElement('div');
-        
-        // Create checkbox input
-        let checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-    checkbox.id = 'word-' + index;
-        checkbox.name = 'word';
-        checkbox.value = item.word;
-        checkbox.dataset.category = item.category;
-        
-        // Create label element
-        let label = document.createElement('label');
-        label.htmlFor = 'word-' + index;
-        label.textContent = item.word;
-        
-        // Append each checkbox into a wrapper
-        wrapper.appendChild(checkbox);
-        wrapper.appendChild(label);
-        
-        // Append wrapper to list
-        checkboxList.appendChild(wrapper);
-        
-        // Event listener for checkbox state change
-        checkbox.addEventListener('change', handleCheckboxChange);
+function createCheckboxes() {
+  checkboxList.style.display = "grid";
+  checkboxList.style.gridTemplateColumns = "repeat(4, 1fr)";
+  checkboxList.style.gap = "10px";
+  checkboxList.style.maxWidth = "600px";
+  checkboxList.style.margin = "20px auto";
+
+  const allWords = getAllWords();
+
+  allWords.forEach((item, index) => {
+    const wrapper = document.createElement("div");
+    wrapper.style.position = "relative";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = "word-" + index;
+    checkbox.dataset.category = item.category;
+    checkbox.value = item.word;
+    checkbox.style.position = "absolute";
+    checkbox.style.opacity = "0";
+
+    const label = document.createElement("label");
+    label.htmlFor = "word-" + index;
+    label.textContent = item.word;
+    label.style.display = "flex";
+    label.style.alignItems = "center";
+    label.style.justifyContent = "center";
+    label.style.height = "70px";
+    label.style.border = "1px solid #ccc";
+    label.style.borderRadius = "10px";
+    label.style.cursor = "pointer";
+    label.style.fontWeight = "600";
+    label.style.transition = "background 0.2s";
+
+    checkbox.addEventListener("change", () => {
+      label.style.background = checkbox.checked ? "#dbeafe" : "#fff";
+      updateSelection();
     });
+
+    wrapper.appendChild(checkbox);
+    wrapper.appendChild(label);
+    checkboxList.appendChild(wrapper);
+  });
 }
 
-// Function to handle checkbox changes, the counter, and disable/enable logic of checkboxes
-function handleCheckboxChange() {
-    let checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
-    let allBoxes = document.querySelectorAll('input[type="checkbox"]');
-    let checkedCount = checkedBoxes.length;
-    
-    // Update counter
-    counter.textContent = 'Selected: ' + checkedCount + '/4';
-    
-    if (checkedCount === 4) {
-        // When fourth checkbox is checked, disable all other checkboxes
-        allBoxes.forEach(box => {
-            if (!box.checked) {
-                box.disabled = true;
-            }
-        });
-        // Enable submit button when exactly 4 are checked
-        submitButton.disabled = false;
-    } else {
-        // Enable all checkboxes otherwise
-        allBoxes.forEach(box => {
-            box.disabled = false;
-        });
-        // Disable submit button otherwise
-        submitButton.disabled = true;
-    }
+function updateSelection() {
+  const allBoxes = document.querySelectorAll('input[type="checkbox"]');
+  const checkedBoxes = document.querySelectorAll(
+    'input[type="checkbox"]:checked'
+  );
+  const count = checkedBoxes.length;
+
+  counter.textContent = `Selected: ${count}/4`;
+
+  if (count === 4) {
+    allBoxes.forEach((box) => {
+      if (!box.checked) box.disabled = true;
+    });
+    submitButton.disabled = false;
+  } else {
+    allBoxes.forEach((box) => (box.disabled = false));
+    submitButton.disabled = true;
+  }
 }
 
-// Function to check if attempted guess is correct
 function checkAnswer() {
-    let checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
-    
-    if (checkedBoxes.length !== 4) {
-        return false;
+  const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+  if (checked.length !== 4) return false;
+  const firstCat = checked[0].dataset.category;
+  return Array.from(checked).every((box) => box.dataset.category === firstCat);
+}
+
+function showMessage(text, color) {
+  messageBox.textContent = text;
+  messageBox.style.padding = "10px";
+  messageBox.style.marginTop = "10px";
+  messageBox.style.textAlign = "center";
+  messageBox.style.fontWeight = "600";
+  messageBox.style.borderRadius = "8px";
+  messageBox.style.background = color;
+}
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+
+  if (checkAnswer()) {
+    showMessage("You found a category.", "#e7f9e7");
+
+    const category = checked[0].dataset.category;
+    checked.forEach((box) => box.parentElement.remove());
+
+    const badge = document.createElement("div");
+    badge.textContent = category.toUpperCase();
+    badge.style.background = "#d9f99d";
+    badge.style.padding = "10px";
+    badge.style.borderRadius = "8px";
+    badge.style.marginTop = "10px";
+    badge.style.fontWeight = "700";
+    foundCategories.appendChild(badge);
+
+    submitButton.disabled = true;
+    counter.textContent = "Selected: 0/4";
+
+    const remaining = document.querySelectorAll('input[type="checkbox"]');
+    remaining.forEach((box) => (box.disabled = false));
+
+    if (remaining.length === 0) {
+      showMessage("You found all categories.", "#fff4d6");
     }
-    
-    // Get the categories of all checked boxes
-    let selectedCategories = Array.from(checkedBoxes).map(box => box.dataset.category);
-    
-    // Check if all categories are the same
-    return selectedCategories.every(cat => cat === selectedCategories[0]);
+  } else {
+    showMessage("Incorrect. Try again.", "#fde8e8");
+  }
 }
-
-// Function 
-function showMessage(text, type){
-    messageBox.textContent = text;
-    messageBox.className = 'message ' + type;
-}
-
-// Function to handle form submission
-function handleSubmit(event) {
-    event.preventDefault();
-    
-    if (checkAnswer()) {
-        // If correct, show alert
-        showMessage('Correct! You found a matching category!', 'success');
-        
-        // Remove the checked elements from the DOM
-        let checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
-        checkedBoxes.forEach(checkbox => {
-            checkbox.parentElement.remove();
-        });
-        
-        // Reset counter
-        counter.textContent = 'Selected: 0/4';
-
-        // Disable submit button again
-        submitButton.disabled = true;
-
-        // Re-enable any remaining checkboxes 
-        let remainingBoxes = document.querySelectorAll('input[type="checkbox"]');
-        remainingBoxes.forEach(box => {
-            box.disabled = false;
-        });
-
-        // Check if game is complete
-        if (remainingBoxes.length === 0) {
-            showMessage("Congrats, you've found all the categories!", 'win');
-        }
-    } else {
-        // If incorrect, show alert
-        showMessage("Incorrect, try again!", 'error');
-    }
-}
-
 
 function init() {
-    generateCheckboxes();
-    gameForm.addEventListener('submit', handleSubmit);
+  createCheckboxes();
+  submitButton.disabled = true;
+  gameForm.addEventListener("submit", handleSubmit);
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    init();
-}
+document.addEventListener("DOMContentLoaded", init);
