@@ -1,0 +1,55 @@
+body {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+p {
+    text-align: center;
+}
+
+#counter {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#checkbox-list {
+    display: flex;
+    flex-direction: column;
+    border: solid 1px #00bceb;
+    margin-bottom: 5px;
+}
+
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+
+input[type="checkbox"]:disabled + label {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#submit-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 10px;
+}
+
+#submit-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+#submit-btn:hover:not(:disabled) {
+    background-color: #45a049;
+}
