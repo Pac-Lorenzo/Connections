@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Connections</title>
-    <link rel="stylesheet" href="connections.css".css">
+    <link rel="stylesheet" href="connections.css">
     <meta name="description" content="Connections Game">
 </head>
 
@@ -13,6 +13,8 @@
     <h1>Categorize</h1>
     <p>Select 4 words that belong to the same category</p>
     <p id="counter">Selected: 0/4</p>
+
+    <div id="message" class="message"></div>
     
     <form id="game-form">
         <div id="checkbox-list">
@@ -20,6 +22,8 @@
         
         <button type="submit" id="submit-btn" disabled>Submit</button>
     </form>
+
+    <div id="found-categories" class="found"></div>
 
     <script src="connections.js"></script>
 </body>

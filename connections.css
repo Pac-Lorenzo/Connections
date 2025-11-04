@@ -18,14 +18,21 @@ p {
 }
 
 #checkbox-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     border: solid 1px #00bceb;
     margin-bottom: 5px;
 }
 
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
 
 input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
     margin-right: 10px;
 }
 
@@ -33,6 +40,26 @@ input[type="checkbox"] {
 input[type="checkbox"]:disabled + label {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+label {
+    display: inline-block;
+    background-color: #f2f2f2;
+    padding: 15px 5px;
+    border-radius: 10px;
+    border: 2px solid #00bceb;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="checkbox"]:checked + label {
+    background-color: #00e5ff;
+    border-color: #0092e6;
+    transform: scale(1.05);
+}
+
+label:hover {
+    background-color: #e0f7ff;
 }
 
 #submit-btn {
@@ -52,4 +79,46 @@ input[type="checkbox"]:disabled + label {
 
 #submit-btn:hover:not(:disabled) {
     background-color: #45a049;
+}
+
+.message {
+    display: none;
+    margin: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.message.success {
+    display: block;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    display: block;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.message.win {
+    display: block;
+    background-color: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+}
+
+.found {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.found div {
+    background-color: #e0ffe0;
+    border: 1px solid #99cc99;
+    border-radius: 8px;
+    margin-top: 5px;
+    padding: 8px;
 }

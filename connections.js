@@ -9,6 +9,8 @@ let checkboxList = document.querySelector("#checkbox-list");
 let submitButton = document.querySelector("button");
 let gameForm = document.querySelector("#game-form");
 let counter = document.querySelector("#counter");
+let messageBox = document.querySelector("#message");
+let foundCategories = document.querySelector("#found-categories");
 
 // Function to create array of ordered words
 function getAllWords() {
@@ -21,7 +23,7 @@ function getAllWords() {
             });
         });
     }
-    return allWords;
+    return allWords.sort(() => Math.random() - 0.5);
 }
 
 // Function to generate checkboxes in order
@@ -42,7 +44,7 @@ function generateCheckboxes() {
         
         // Create label element
         let label = document.createElement('label');
-    label.htmlFor = 'word-' + index;
+        label.htmlFor = 'word-' + index;
         label.textContent = item.word;
         
         // Append each checkbox into a wrapper
@@ -100,13 +102,19 @@ function checkAnswer() {
     return selectedCategories.every(cat => cat === selectedCategories[0]);
 }
 
+// Function 
+function showMessage(text, type){
+    messageBox.textContent = text;
+    messageBox.className = 'message ' + type;
+}
+
 // Function to handle form submission
 function handleSubmit(event) {
     event.preventDefault();
     
     if (checkAnswer()) {
         // If correct, show alert
-        window.alert('Correct! You found a matching category!');
+        showMessage('Correct! You found a matching category!', 'success');
         
         // Remove the checked elements from the DOM
         let checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
@@ -128,11 +136,11 @@ function handleSubmit(event) {
 
         // Check if game is complete
         if (remainingBoxes.length === 0) {
-            window.alert('Congratulations! You found all categories!');
+            showMessage("Congrats, you've found all the categories!", 'win');
         }
     } else {
         // If incorrect, show alert
-        window.alert('Incorrect! These words are not all from the same category. Try again!');
+        showMessage("Incorrect, try again!", 'error');
     }
 }
 
